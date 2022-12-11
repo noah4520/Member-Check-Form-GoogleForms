@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>206旅2營1連福委用專車生成表單</title>
+
+    <style>
+      *{
+        box-sizing: border-box;
+        font-size: 12pt;
+        font-family: sans-serif;
+      }
+
+      input{
+        border-radius: 6px;
+      }
+
+      textarea{
+        border-radius: 6px;
+      }
+
+      .container{
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+
+      .middleFlex{
+        display: flex; 
+        flex-wrap: wrap; 
+        align-items: center; 
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+
+      <div style="padding: 10px 0;">
+        <span>單位：</span>
+        <input id="battalion" style="width: 80px;" value="一連"></input>
+      </div>
+
+      <div class="middleFlex" style="padding: 20px 0;">
+        <span>放假日期：</span>
+        <input id="startDate" type="date">
+
+        <span>收假日期：</span>
+        <input id="endDate" type="date">
+      </div>
+
+      <div style="padding: 20px 0;">請上傳Google表單的CVS：</div>
+      <div class="middleFlex" style="padding:10px 0;">
+        <input type="file" accept="text/csv">
+        <progress value="0"></progress>
+      </div>
+
+      <div id="dataText"></div>
+      <textarea id ="MessageText" name="messageText" rows="20" style="width: 100%;" required>
+        
+      </textarea>
+    </div>
+    
+    <script type="text/javascript">
+      // changeJSON
+      let csvJson = "";
+
+      // 離營
+      let goKeelungCount = 0;
+      let goKeelungText = "";
+
+      // 入營
+      let formKeelungCount = 0;
+      let formKeelungText = "";
+
+      let goTaoyuanCount = 0;
+      let goTaoyuanText = "";
+
+      let formTaoyuanCount = 0;
+      let formTaoyuanText = "";
+
+      let goMiaoliCount = 0;
+      let goMiaoliText = "";
+
+      let formMiaoliCount = 0;
+      let formMiaoliText = "";
+
+      let goTaichungCount = 0;
+      let goTaichungText = "";
+
+      let formTaichungCount = 0;
+      let formTaichungText = "";
+
+      // 自行出入營
+      let goSelfCount = 0;
+      let goSelfText = "";
+
+      let formSelfCount = 0;
+      let formSelfText = "";
+      
+      // date
+      let startDate = "";
+      let endData = "";
+
+      window.onload = (event) => {
+        main();
+      }
+
+      function main(){
+        var inputFile = document.querySelector("input[type='file']");
+        
+        inputFile.onchange = (event) => {
+          var file = inputFile.files[0];
+
+          var fileReader = new FileReader();
+          fileReader.readAsText(file, "utf-8");
+
+          var progress = document.querySelector("progress");
+          progress.max = file.size;
+          progress.value = 0;
+          fileReader.onprogress = (event) => {
+            progress.value = event.loaded;
+          }
+
+          fileReader.onload = (event) => {
+            console.log(event, fileReader);
+           
+            csvJson = csvJSON(fileReader.result); 
+            console.log(csvJson);
+
+            checkJSON(csvJson);
+          }
+
+        }
+      }
+
+      function checkJSON(dataJson){
+        for(keys in dataJson){
+          if(dataJson[keys]["\"離營下車的地點\""])
+          {
+            if(dataJson[keys]["\"離營下車的地點\""] === '基隆 $250')
+            {
+              goKeelungCount += 1;
+              goKeelungText += `${dataJson[keys]["\"你的學號?\""]}、`
+            }
+            if(dataJson[keys]["\"離營下車的地點\""] === '桃園 $200')
+            {
+              goTaoyuanCount += 1;
+              goTaoyuanText += `${dataJson[keys]["\"你的學號?\""]}、`
+            }
+            if(dataJson[keys]["\"離營下車的地點\""] === '苗栗 $200')
+            {
+              goMiaoliCount += 1;
+              goMiaoliText += `${dataJson[keys]["\"你的學號?\""]}、`
+            }
+            if(dataJson[keys]["\"離營下車的地點\""] === '台中 $250')
+            {
+              goTaichungCount += 1;
+              goTaichungText += `${dataJson[keys]["\"你的學號?\""]}、`
+            }
+            if(dataJson[keys]["\"離營下車的地點\""] === '不搭乘離營車，將自行出營')
+            {
+              goSelfCount += 1;
+              goSelfText += `${dataJson[keys]["\"你的學號?\""]}、`
+            }
+          }
+
+          if(dataJson[keys]["\"回營上車的地點\""]){
+            console.log(dataJson[keys]["\"回營上車的地點\""]);
+
+            if(dataJson[keys]["\"回營上車的地點\""] === '基隆 $250')
+            {
+              formKeelungCount += 1;
+              formKeelungText += `${dataJson[keys]["\"你的學號?\""]}、`
+            }
+            if(dataJson[keys]["\"回營上車的地點\""] === '桃園 $200')
+            {
+              formTaoyuanCount += 1;
+              formTaoyuanText += `${dataJson[keys]["\"你的學號?\""]}、`
+            }
+            if(dataJson[keys]["\"回營上車的地點\""] === '苗栗 $200')
+            {
+              formMiaoliCount += 1;
+              formMiaoliText += `${dataJson[keys]["\"你的學號?\""]}、`
+            }
+            if(dataJson[keys]["\"回營上車的地點\""] === '台中 $250')
+            {
+              formTaichungCount += 1;
+              formTaichungText += `${dataJson[keys]["\"你的學號?\""]}、`
+            }
+            if(dataJson[keys]["\"回營上車的地點\""] === '不搭乘入營車，將自行回營')
+            {
+              formSelfCount += 1;
+              formSelfText += `${dataJson[keys]["\"你的學號?\""]}、`
+            }
+          }     
+        }
+
+        outputJSON();
+      }
+
+      function outputJSON(){
+
+        startDate = document.getElementById("startDate").value.slice(5).replace('-','/');
+        endDate = document.getElementById("endDate").value.slice(5).replace('-','/');
+
+        let text = 
+        `${document.getElementById("battalion").value}：
+
+  ${startDate} 放假
+      
+  1.基隆：${goKeelungCount}員
+
+  學號如下：${goKeelungText.slice(0,-1)}
+
+  2.桃園：${goTaoyuanCount}員
+
+  學號如下：${goTaoyuanText.slice(0,-1)}
+
+  3.苗栗：${goMiaoliCount}員
+
+  學號如下：${goMiaoliText.slice(0,-1)}
+
+  4.臺中：${goTaichungCount}員 
+
+  學號如下：${goTaichungText.slice(0,-1)}
+
+  總人數${goKeelungCount + goTaoyuanCount + goMiaoliCount + goTaichungCount}人
+
+  ---------------------------------------------------------
+
+  ${endDate} 收假
+      
+  1.基隆：${formKeelungCount}員
+
+  學號如下：${formKeelungText.slice(0,-1)}
+
+  2.桃園：${formTaoyuanCount}員
+
+  學號如下：${formTaoyuanText.slice(0,-1)}
+
+  3.苗栗：${formMiaoliCount}員
+
+  學號如下：${formMiaoliText.slice(0,-1)}
+
+  4.臺中：${formTaichungCount}員 
+
+  學號如下：${formTaichungText.slice(0,-1)}
+
+  總人數${formKeelungCount + formTaoyuanCount + formMiaoliCount + formTaichungCount}人
+  
+  ---------------------------------------------------------
+
+  自行出營：${goSelfCount}員
+  
+  學號如下：${goSelfText.slice(0,-1)}
+
+
+  自行入營：${formSelfCount}員
+  
+  學號如下：${formSelfText.slice(0,-1)}
+  `
+
+        document.getElementById("MessageText").value = text;
+      }
+
+      function csvJSON(csv){
+
+        var lines=csv.split("\n");
+        var result = [];
+        var headers = lines[0].split(",");
+
+        for(var i=1; i<lines.length; i++) {
+          var obj = {};
+
+          var row = lines[i],
+            queryIdx = 0,
+            startValueIdx = 0,
+            idx = 0;
+
+          if (row.trim() === '') { continue; }
+
+          while (idx < row.length) {
+            /* if we meet a double quote we skip until the next one */
+            var c = row[idx];
+
+            if (c === '"') {
+              do { c = row[++idx]; } while (c !== '"' && idx < row.length - 1);
+            }
+
+            if (c === ',' || /* handle end of line with no comma */ idx === row.length - 1) {
+              /* we've got a value */
+              var value = row.substr(startValueIdx, idx - startValueIdx).trim();
+
+              /* skip first double quote */
+              if (value[0] === '"') { value = value.substr(1); }
+              /* skip last comma */
+              if (value[value.length - 1] === ',') { value = value.substr(0, value.length - 1); }
+              /* skip last double quote */
+              if (value[value.length - 1] === '"') { value = value.substr(0, value.length - 1); }
+
+              var key = headers[queryIdx++];
+              obj[key] = value;
+              startValueIdx = idx + 1;
+            }
+
+            ++idx;
+          }
+
+          result.push(obj);
+        }
+        return result;
+      }
+
+    </script>
+  </body>
+</html>
