@@ -7,13 +7,28 @@
     <link rel="apple-touch-icon" href="icon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title>206旅2營1連福委用專車生成表單</title>
+    <title>206旅二營一連專車統計訊息產生器</title>
 
     <style>
       *{
         box-sizing: border-box;
         font-size: 12pt;
         font-family: sans-serif;
+      }
+
+      body{
+        margin: 0;
+        padding: 0;
+      }
+
+      a{
+        color: unset;
+        text-decoration: none;
+      }
+
+      i{
+        padding-right: 15px;
+        font-size: 26pt;
       }
 
       input{
@@ -36,36 +51,74 @@
         align-items: center; 
         justify-content: space-between;
       }
+
+      .textPadding{
+        padding: 10px 0;
+      }
     </style>
   </head>
   <body>
-    <div class="container">
+    <div style="padding: 20px 0; font-size: 18pt; text-align: center; font-weight: 600; background-color: coral; color: white; margin-bottom: 10px;">206旅二營一連 專車統計訊息產生器</div>
 
-      <div style="padding: 10px 0;">
-        <span>單位：</span>
-        <input id="battalion" style="width: 80px;" value="一連"></input>
-      </div>
-
+    <div class="container" style="padding-bottom: 150px;">
       <div class="middleFlex" style="padding: 20px 0;">
-        <span>放假日期：</span>
-        <input id="startDate" type="date">
+        <div>
+          <span>單位：</span>
+          <input id="battalion" style="width: 80px;" value="一連"></input>
+        </div>
 
-        <span>收假日期：</span>
-        <input id="endDate" type="date">
-      </div>
+        <div>
+          <span>放假日期：</span>
+          <input id="startDate" type="date">
+        </div>
 
-      <div style="padding: 20px 0;">請上傳Google表單的CVS：</div>
+        <div>
+          <span>收假日期：</span>
+          <input id="endDate" type="date">
+        </div>
+      </div>  
+      
       <div class="middleFlex" style="padding:10px 0;">
-        <input type="file" accept="text/csv">
+        <div>
+          <span style="padding: 20px 0;">請上傳Google表單的CVS：</span>
+          <input type="file" accept="text/csv">
+        </div>
+        
         <progress value="0"></progress>
       </div>
 
-      <div id="dataText"></div>
-      <textarea id ="MessageText" name="messageText" rows="20" style="width: 100%;" required>
-        
-      </textarea>
+      <div style="display: grid; grid-template-columns: repeat(2,auto); column-gap: 20px;">
+        <div>
+          <div class="textPadding">乘車名單：</div>
+          <textarea id ="MessageText" name="messageText" rows="30" style="width: 100%;"readonly required></textarea>
+        </div>
+
+        <div>
+          <div class="textPadding">自行出入營名單：</div>
+          <textarea id ="SelfText" name="messageText" rows="30" style="width: 100%;"readonly required></textarea>
+        </div>
+      </div>
+      
+    </div>
+
+    <div style="position:fixed; bottom: 0; width: 100%; background-color:coral; padding: 10px 0; margin-top: 20px;">
+      <div class="container">
+        <div style="display: flex; flex-wrap: nowrap;">
+          <div style="width: 70%;">
+            <div style="font-size: 18pt; color:white; padding: 15px 0;">Developer</div>
+            <div style="font-size: 14pt; color:white; padding:10px 0;">UhikoChen</div>
+          </div>
+          <div>
+            <div style="font-size: 18pt; color:white; padding: 15px 0;">Contact</div>
+            <a href="https://github.com/UhikoChen" target="_blank"><i class="fa-brands fa-github"></i></a>
+            <a href="https://www.instagram.com/uhiko_chen/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+          
+        </div>
+      </div>
     </div>
     
+    <script src="https://kit.fontawesome.com/978ee80c9d.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
       // changeJSON
       let csvJson = "";
@@ -132,7 +185,6 @@
 
             checkJSON(csvJson);
           }
-
         }
       }
 
@@ -186,7 +238,6 @@
             }
           }     
         }
-
         outputJSON();
       }
 
@@ -195,7 +246,7 @@
         startDate = document.getElementById("startDate").value.slice(5).replace('-','/');
         endDate = document.getElementById("endDate").value.slice(5).replace('-','/');
 
-        let text = 
+        let carText = 
         `${document.getElementById("battalion").value}：
 
 ●${startDate} 休假，總人數${goKeelungArray.length + goTaoyuanArray.length + goMiaoliArray.length + goTaichungArray.length}人
@@ -233,11 +284,10 @@
 
     4.臺中：${fromTaichungArray.length}員
 
-        學號如下：${fromTaichungArray.sort().join("、")}
+        學號如下：${fromTaichungArray.sort().join("、")}`
 
-  ---------------------------------------------------------
 
-  自行出營：${goSelfArray.length}員
+  let selfText = `自行出營：${goSelfArray.length}員
   
   學號如下：${goSelfArray.sort().join("、")}
 
@@ -247,7 +297,8 @@
   學號如下：${fromSelfArray.sort().join("、")}
   `
 
-        document.getElementById("MessageText").value = text;
+        document.getElementById("MessageText").value = carText;
+        document.getElementById("SelfText").value = selfText;
       }
 
       function csvJSON(csv){
