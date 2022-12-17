@@ -16,9 +16,15 @@
         font-family: sans-serif;
       }
 
+      html {
+        min-height: 100%;
+        position: relative;
+      }
+
       body{
         margin: 0;
         padding: 0;
+        background-color: coral;
       }
 
       a{
@@ -45,11 +51,17 @@
         padding: 0 15px;
       }
 
+      .footer{
+        position: absolute;
+        bottom: 0;
+      }
+
       .middleFlex{
         display: flex; 
         flex-wrap: wrap; 
         align-items: center; 
         justify-content: space-between;
+        row-gap: 10px;
       }
 
       .textPadding{
@@ -58,9 +70,9 @@
     </style>
   </head>
   <body>
-    <div style="padding: 20px 0; font-size: 18pt; text-align: center; font-weight: 600; background-color: coral; color: white; margin-bottom: 10px;">206旅二營一連 專車統計訊息產生器</div>
+    <div style="padding: 20px 0; font-size: 16pt; text-align: center; font-weight: 600; background-color: coral; color: white;">206旅二營一連 專車統計訊息產生器</div>
 
-    <div class="container" style="padding-bottom: 150px;">
+    <div class="container" style="background-color: white;">
       <div class="middleFlex" style="padding: 20px 0;">
         <div>
           <span>單位：</span>
@@ -81,30 +93,37 @@
       <div class="middleFlex" style="padding:10px 0;">
         <div>
           <span style="padding: 20px 0;">請上傳Google表單的CVS：</span>
-          <input type="file" accept="text/csv">
+          <input type="file" accept="text/csv" style="padding: 10px 0;">
         </div>
-        
-        <progress value="0"></progress>
+        <!-- <progress value="0"></progress> -->
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(2,auto); column-gap: 20px;">
+      <div style="display: grid; grid-template-columns: repeat(2,auto); column-gap: 20px; padding-bottom: 150px;">
         <div>
-          <div class="textPadding">乘車名單：</div>
-          <textarea id ="MessageText" name="messageText" rows="30" style="width: 100%;"readonly required></textarea>
+          <div class="middleFlex">
+            <div class="textPadding">搭乘專車：</div>
+            <button id="CarTextBtn">Copy</button>
+          </div>
+
+          <textarea id="CarTextarea" name="messageText" rows="20" style="width: 100%;"readonly required></textarea>          
         </div>
 
-        <div>
-          <div class="textPadding">自行出入營名單：</div>
-          <textarea id ="SelfText" name="messageText" rows="30" style="width: 100%;"readonly required></textarea>
+        <div>    
+          <div class="middleFlex">
+            <div class="textPadding">自行出入：</div>
+            <button id="SelfTextBtn">Copy</button>
+          </div>
+
+          <textarea id ="SelfTextarea" name="messageText" rows="20" style="width: 100%;"readonly required></textarea>
         </div>
       </div>
       
     </div>
 
-    <div style="position:fixed; bottom: 0; width: 100%; background-color:coral; padding: 10px 0; margin-top: 20px;">
+    <div class="footer" style="width: 100%; background-color:coral; padding: 10px 0; margin-top: 20px;">
       <div class="container">
-        <div style="display: flex; flex-wrap: nowrap;">
-          <div style="width: 70%;">
+        <div style="display: flex; flex-wrap: nowrap; justify-content: space-between;">
+          <div>
             <div style="font-size: 18pt; color:white; padding: 15px 0;">Developer</div>
             <div style="font-size: 14pt; color:white; padding:10px 0;">UhikoChen</div>
           </div>
@@ -161,6 +180,20 @@
         main();
       }
 
+      const select = (DOM) => document.querySelector(DOM);
+
+      select('#CarTextBtn').addEventListener('click', () => {
+        select('#CarTextarea').select();
+        document.execCommand("copy");
+        alert("複製成功！");
+      })
+
+      select('#SelfTextBtn').addEventListener('click', () => {
+        select('#SelfTextarea').select();
+        document.execCommand("copy");
+        alert("複製成功！");
+      })
+
       function main(){
         var inputFile = document.querySelector("input[type='file']");
         
@@ -170,12 +203,12 @@
           var fileReader = new FileReader();
           fileReader.readAsText(file, "utf-8");
 
-          var progress = document.querySelector("progress");
-          progress.max = file.size;
-          progress.value = 0;
-          fileReader.onprogress = (event) => {
-            progress.value = event.loaded;
-          }
+          // var progress = document.querySelector("progress");
+          // progress.max = file.size;
+          // progress.value = 0;
+          // fileReader.onprogress = (event) => {
+          //   progress.value = event.loaded;
+          // }
 
           fileReader.onload = (event) => {
             console.log(event, fileReader);
@@ -297,8 +330,8 @@
   學號如下：${fromSelfArray.sort().join("、")}
   `
 
-        document.getElementById("MessageText").value = carText;
-        document.getElementById("SelfText").value = selfText;
+        document.getElementById("CarTextarea").value = carText;
+        document.getElementById("SelfTextarea").value = selfText;
       }
 
       function csvJSON(csv){
