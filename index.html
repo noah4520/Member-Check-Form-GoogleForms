@@ -51,9 +51,21 @@
         padding: 0 15px;
       }
 
+      .title-nav{
+        padding: 20px 0;
+        font-size: 16pt;
+        text-align: center;
+        font-weight: 600;
+        color: white;
+      }
+
       .footer{
         position: absolute;
         bottom: 0;
+        width: 100%;
+        background-color: coral;
+        padding: 10px 0;
+        margin-top: 20px;
       }
 
       .middleFlex{
@@ -70,59 +82,61 @@
     </style>
   </head>
   <body>
-    <div style="padding: 20px 0; font-size: 16pt; text-align: center; font-weight: 600; background-color: coral; color: white;">206旅二營一連 專車統計訊息產生器</div>
+    <div class="title-nav">206旅二營一連 專車統計訊息產生器</div>
 
-    <div class="container" style="background-color: white;">
-      <div class="middleFlex" style="padding: 20px 0;">
-        <div>
-          <span>單位：</span>
-          <input id="battalion" style="width: 80px;" value="一連"></input>
-        </div>
-
-        <div>
-          <span>放假日期：</span>
-          <input id="startDate" type="date">
-        </div>
-
-        <div>
-          <span>收假日期：</span>
-          <input id="endDate" type="date">
-        </div>
-      </div>  
-      
-      <div class="middleFlex" style="padding:10px 0;">
-        <div>
-          <span style="padding: 20px 0;">請上傳Google表單的CVS：</span>
-          <input type="file" accept="text/csv" style="padding: 10px 0;">
-        </div>
-        <!-- <progress value="0"></progress> -->
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(2,auto); column-gap: 20px; padding-bottom: 150px;">
-        <div>
-          <div class="middleFlex">
-            <div class="textPadding">搭乘專車：</div>
-            <button id="CarTextBtn">Copy</button>
+    <div style="background-color: white;">
+      <div class="container" style="background-color: white;">
+        <div class="middleFlex" style="padding: 20px 0;">
+          <div>
+            <span>單位：</span>
+            <input id="battalion" style="width: 80px;" value="一連"></input>
           </div>
 
-          <textarea id="CarTextarea" name="messageText" rows="20" style="width: 100%;"readonly required></textarea>          
-        </div>
-
-        <div>    
-          <div class="middleFlex">
-            <div class="textPadding">自行出入：</div>
-            <button id="SelfTextBtn">Copy</button>
+          <div>
+            <span>放假日期：</span>
+            <input id="startDate" type="date">
           </div>
 
-          <textarea id ="SelfTextarea" name="messageText" rows="20" style="width: 100%;"readonly required></textarea>
+          <div>
+            <span>收假日期：</span>
+            <input id="endDate" type="date">
+          </div>
+        </div>  
+        
+        <div class="middleFlex" style="padding:10px 0;">
+          <div>
+            <span style="padding: 20px 0;">請上傳Google表單的CVS：</span>
+            <input type="file" accept="text/csv" style="padding: 10px 0;">
+          </div>
+          <!-- <progress value="0"></progress> -->
         </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2,auto); column-gap: 20px; padding-bottom: 200px;">
+          <div>
+            <div class="middleFlex">
+              <div class="textPadding">搭乘專車：</div>
+              <button id="CarTextBtn">Copy</button>
+            </div>
+
+            <textarea id="CarTextarea" name="messageText" rows="20" style="width: 100%;"readonly required></textarea>          
+          </div>
+
+          <div>    
+            <div class="middleFlex">
+              <div class="textPadding">自行出入：</div>
+              <button id="SelfTextBtn">Copy</button>
+            </div>
+
+            <textarea id ="SelfTextarea" name="messageText" rows="20" style="width: 100%;"readonly required></textarea>
+          </div>
+        </div>
+        
       </div>
-      
     </div>
 
-    <div class="footer" style="width: 100%; background-color:coral; padding: 10px 0; margin-top: 20px;">
+    <div class="footer">
       <div class="container">
-        <div style="display: flex; flex-wrap: nowrap; justify-content: space-between;">
+        <div style="display: flex; flex-wrap: nowrap; justify-content: space-between; padding: 0px 20px;">
           <div>
             <div style="font-size: 18pt; color:white; padding: 15px 0;">Developer</div>
             <div style="font-size: 14pt; color:white; padding:10px 0;">UhikoChen</div>
@@ -172,7 +186,7 @@
       // 自行入營
       let fromSelfArray = [];
       
-      // date
+      // 時間設定
       let startDate = "";
       let endData = "";
 
