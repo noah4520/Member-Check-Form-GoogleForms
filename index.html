@@ -205,11 +205,11 @@
 
     // 自行入營
     let fromSelfArray = [];
-    */
+    
     // 時間設定
     let startDate = "";
     let endData = "";
-
+    */
     window.onload = (event) => {
       main();
     }
@@ -266,10 +266,10 @@
         goTaichung = go(data, "台中 $250"),
         fromTaichung = from(data, "台中 $250"),
         goSelf = go(data, "不搭乘離營車，將自行出營"),
-        fromSelf = from(data, "不搭乘入營車，將自行回營");
+        fromSelf = from(data, "不搭乘入營車，將自行回營"),
 
-      startDate = document.getElementById("startDate").value.slice(5).replace('-', '/');
-      endDate = document.getElementById("endDate").value.slice(5).replace('-', '/');
+        startDate = document.getElementById("startDate").value.slice(5).replace('-', '/'),
+        endDate = document.getElementById("endDate").value.slice(5).replace('-', '/');
       let carText =
         `${document.getElementById("battalion").value}：
 
