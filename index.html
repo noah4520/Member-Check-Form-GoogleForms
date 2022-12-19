@@ -121,13 +121,13 @@
       </div>
 
       <div class="middleFlex" style="padding:10px 0;">
-        <div class="container">
+        <form class="container">
           <label for="file-upload" class="custom-file-upload">
             <i class="fa fa-cloud-upload"></i>
             <span id="file-name" style="padding: 20px 0;">請選擇檔案(副檔名：csv)</span>
           </label>
-          <input id="file-upload" type="file" accept="text/csv">
-        </div>
+          <input id="file-upload" type="file" accept="text/csv" onclick="reset()">
+        </form>
         <!-- <progress value="0"></progress> -->
       </div>
 
