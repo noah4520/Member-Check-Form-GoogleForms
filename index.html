@@ -346,7 +346,11 @@
     function csvJSON(csv) {
       // Split data into lines and separate headers from actual data
       // using Array spread operator
-      const [headerLine, ...lines] = csv.split('\n');
+      const [headerLine, ...lines] = csv.split(/\r?\n(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/);
+
+      for (let i in lines) {
+        lines[i] = JSON.parse(JSON.stringify(lines[i].replace(/\r\n/g, '').replace(/\r/g, '').replace(/\n/g, '')));
+      }
 
       // Use common line separator, which parses each line as the contents of a JSON array
       const parseLine = (line) => JSON.parse(`[${line}]`);
