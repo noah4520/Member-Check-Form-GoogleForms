@@ -25,7 +25,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: coral;
+      background-color: #78866B;
     }
 
     a {
@@ -64,7 +64,7 @@
       position: absolute;
       bottom: 0;
       width: 100%;
-      background-color: coral;
+      background-color: #78866B;
       padding: 10px 0;
       margin-top: 20px;
     }
@@ -77,6 +77,19 @@
       row-gap: 10px;
     }
 
+    input[type="file"] {
+      position: fixed;
+      right: 100%;
+      bottom: 100%;
+    }
+
+    .custom-file-upload {
+      border: 1px solid #ccc;
+      display: inline-block;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
     .textPadding {
       padding: 10px 0;
     }
@@ -84,14 +97,19 @@
 </head>
 
 <body>
-  <div class="title-nav">206旅二營一連 專車統計訊息產生器</div>
+  <header class="title-nav">206旅二營一連 專車統計訊息產生器</header>
 
-  <div style="background-color: white;">
+  <main style="background-color: white;">
     <div class="container" style="background-color: white;">
       <div class="middleFlex" style="padding: 20px 0;">
         <div>
           <span>單位：</span>
           <input id="battalion" style="width: 80px;" value="一連"></input>
+        </div>
+
+        <div>
+          <span>人數：</span>
+          <input id="headCount" style="width: 80px;" value="154"></input>
         </div>
 
         <div>
@@ -106,10 +124,13 @@
       </div>
 
       <div class="middleFlex" style="padding:10px 0;">
-        <div>
-          <span style="padding: 20px 0;">請上傳Google表單的CVS：</span>
-          <input type="file" accept="text/csv" style="padding: 10px 0;">
-        </div>
+        <form class="container">
+          <label for="file-upload" class="custom-file-upload">
+            <i class="fa fa-cloud-upload"></i>
+            <span id="file-name" style="padding: 20px 0;">請選擇檔案(副檔名：csv)</span>
+          </label>
+          <input id="file-upload" type="file" accept="text/csv" onclick="reset()">
+        </form>
         <!-- <progress value="0"></progress> -->
       </div>
 
@@ -131,12 +152,21 @@
 
           <textarea id="SelfTextarea" name="messageText" rows="20" style="width: 100%;" readonly required></textarea>
         </div>
+
+        <div>
+          <div class="middleFlex">
+            <div class="textPadding">未填表單學號：</div>
+          </div>
+
+          <label id="notInList"></label>
+        </div>
+
       </div>
 
     </div>
-  </div>
+  </main>
 
-  <div class="footer">
+  <footer class="footer">
     <div class="container">
       <div style="display: flex; flex-wrap: nowrap; justify-content: space-between; padding: 0px 20px;">
         <div>
@@ -151,46 +181,43 @@
 
       </div>
     </div>
-  </div>
+  </footer>
 
   <script src="https://kit.fontawesome.com/978ee80c9d.js" crossorigin="anonymous"></script>
   <script type="text/javascript">
     // changeJSON
-    let csvJson = "";
+    let csvJson = "",
+      newCsvJson = "";
 
     // 基隆離營
-    let goKeelungArray = [];
+    let goKeelung;
 
     // 基隆入營
-    let fromKeelungArray = [];
+    let fromKeelung;
 
     // 桃園離營
-    let goTaoyuanArray = [];
+    let goTaoyuan;
 
     // 桃園入營
-    let fromTaoyuanArray = [];
+    let fromTaoyuan;
 
     // 苗栗離營
-    let goMiaoliArray = [];
+    let goMiaoli;
 
     // 苗栗入營
-    let fromMiaoliArray = [];
+    let fromMiaoli;
 
     // 台中離營
-    let goTaichungArray = [];
+    let goTaichung;
 
     // 台中入營
-    let fromTaichungArray = [];
+    let fromTaichung;
 
     // 自行出營
-    let goSelfArray = [];
+    let goSelf;
 
     // 自行入營
-    let fromSelfArray = [];
-
-    // 時間設定
-    let startDate = "";
-    let endData = "";
+    let fromSelf;
 
     window.onload = (event) => {
       main();
@@ -211,12 +238,12 @@
     })
 
     function main() {
-      var inputFile = document.querySelector("input[type='file']");
+      const inputFile = document.querySelector("input[type='file']");
 
       inputFile.onchange = (event) => {
-        var file = inputFile.files[0];
+        const file = inputFile.files[0];
 
-        var fileReader = new FileReader();
+        const fileReader = new FileReader();
         fileReader.readAsText(file, "utf-8");
 
         // var progress = document.querySelector("progress");
@@ -228,161 +255,171 @@
 
         fileReader.onload = (event) => {
           console.log(event, fileReader);
-
+          document.getElementById('file-name').innerHTML = file.name;
           csvJson = csvJSON(fileReader.result);
-          console.log(csvJson);
 
-          checkJSON(csvJson);
+          newCsvJson = changeIdKey(csvJson);
+          console.log(newCsvJson);
+
+          outputJSON(newCsvJson);
         }
       }
     }
-
-    function checkJSON(dataJson) {
-      for (keys in dataJson) {
-        if (dataJson[keys]["\"離營下車的地點\""]) {
-          if (dataJson[keys]["\"離營下車的地點\""] === '基隆 $250') {
-            goKeelungArray.push(dataJson[keys]["\"你的學號?\""])
-          }
-          if (dataJson[keys]["\"離營下車的地點\""] === '桃園 $200') {
-            goTaoyuanArray.push(dataJson[keys]["\"你的學號?\""]);
-          }
-          if (dataJson[keys]["\"離營下車的地點\""] === '苗栗 $200') {
-            goMiaoliArray.push(dataJson[keys]["\"你的學號?\""]);
-          }
-          if (dataJson[keys]["\"離營下車的地點\""] === '台中 $250') {
-            goTaichungArray.push(dataJson[keys]["\"你的學號?\""]);
-          }
-          if (dataJson[keys]["\"離營下車的地點\""] === '不搭乘離營車，將自行出營') {
-            goSelfArray.push(dataJson[keys]["\"你的學號?\""]);
-          }
-        }
-
-        if (dataJson[keys]["\"回營上車的地點\""]) {
-          if (dataJson[keys]["\"回營上車的地點\""] === '基隆 $250') {
-            fromKeelungArray.push(dataJson[keys]["\"你的學號?\""]);
-          }
-          if (dataJson[keys]["\"回營上車的地點\""] === '桃園 $200') {
-            fromTaoyuanArray.push(dataJson[keys]["\"你的學號?\""]);
-          }
-          if (dataJson[keys]["\"回營上車的地點\""] === '苗栗 $200') {
-            fromMiaoliArray.push(dataJson[keys]["\"你的學號?\""]);
-          }
-          if (dataJson[keys]["\"回營上車的地點\""] === '台中 $250') {
-            fromTaichungArray.push(dataJson[keys]["\"你的學號?\""]);
-          }
-          if (dataJson[keys]["\"回營上車的地點\""] === '不搭乘入營車，將自行回營') {
-            fromSelfArray.push(dataJson[keys]["\"你的學號?\""]);
-          }
+    /* 修改「你的學號?」欄位為「id」*/
+    function changeIdKey(data) {
+      let result;
+      for (key in data[0]) {
+        if (key.indexOf('學號') !== -1) {
+          result = data.map((
+            { [key]: ID, ...data }) => (
+            { id: ID, ...data }
+          ));
+          break;
         }
       }
-      outputJSON();
+      return result;
     }
 
-    function outputJSON() {
+    function outputJSON(data) {
 
-      startDate = document.getElementById("startDate").value.slice(5).replace('-', '/');
-      endDate = document.getElementById("endDate").value.slice(5).replace('-', '/');
+      goKeelung = go(data, "基隆 $250");
+      fromKeelung = from(data, "基隆 $250");
+
+      goTaoyuan = go(data, "桃園 $200");
+      fromTaoyuan = from(data, "桃園 $200");
+
+      goMiaoli = go(data, "苗栗 $200");
+      fromMiaoli = from(data, "苗栗 $200");
+
+      goTaichung = go(data, "台中 $250");
+      fromTaichung = from(data, "台中 $250");
+
+      goSelf = go(data, "不搭乘離營車，將自行出營");
+      fromSelf = from(data, "不搭乘入營車，將自行回營");
+
+      let notFillOut = notInList(data);
+
+      let startDate = document.getElementById("startDate").value.slice(5).replace('-', '/');
+      let endDate = document.getElementById("endDate").value.slice(5).replace('-', '/');
 
       let carText =
         `${document.getElementById("battalion").value}：
 
-●${startDate} 休假，總人數${goKeelungArray.length + goTaoyuanArray.length + goMiaoliArray.length + goTaichungArray.length}人
+●${startDate} 休假，總人數${goKeelung.length + goTaoyuan.length + goMiaoli.length + goTaichung.length}人
+      
+    1.基隆：${goKeelung.length}員
 
-    1.基隆：${goKeelungArray.length}員
+        學號如下：${goKeelung.join("、")}
 
-        學號如下：${goKeelungArray.sort().join("、")}
+    2.桃園：${goTaoyuan.length}員
 
-    2.桃園：${goTaoyuanArray.length}員
+        學號如下：${goTaoyuan.join("、")}
 
-        學號如下：${goTaoyuanArray.sort().join("、")}
+    3.苗栗：${goMiaoli.length}員
 
-    3.苗栗：${goMiaoliArray.length}員
+        學號如下：${goMiaoli.join("、")}
 
-        學號如下：${goMiaoliArray.sort().join("、")}
+    4.臺中：${goTaichung.length}員 
 
-    4.臺中：${goTaichungArray.length}員
-
-        學號如下：${goTaichungArray.sort().join("、")}
-
-
-●${endDate} 收假，總人數${fromKeelungArray.length + fromTaoyuanArray.length + fromMiaoliArray.length + fromTaichungArray.length}人
-
-    1.基隆：${fromKeelungArray.length}員
-
-        學號如下：${fromKeelungArray.sort().join("、")}
-
-    2.桃園：${fromTaoyuanArray.length}員
-
-        學號如下：${fromTaoyuanArray.sort().join("、")}
-
-    3.苗栗：${fromMiaoliArray.length}員
-
-        學號如下：${fromMiaoliArray.sort().join("、")}
-
-    4.臺中：${fromTaichungArray.length}員
-
-        學號如下：${fromTaichungArray.sort().join("、")}`
+        學號如下：${goTaichung.join("、")}
 
 
-      let selfText = `自行出營：${goSelfArray.length}員
+●${endDate} 收假，總人數${fromKeelung.length + fromTaoyuan.length + fromMiaoli.length + fromTaichung.length}人
+      
+    1.基隆：${fromKeelung.length}員
 
-  學號如下：${goSelfArray.sort().join("、")}
+        學號如下：${fromKeelung.join("、")}
+
+    2.桃園：${fromTaoyuan.length}員
+
+        學號如下：${fromTaoyuan.join("、")}
+
+    3.苗栗：${fromMiaoli.length}員
+
+        學號如下：${fromMiaoli.join("、")}
+
+    4.臺中：${fromTaichung.length}員
+
+        學號如下：${fromTaichung.join("、")}`
 
 
-  自行入營：${fromSelfArray.length}員
+      let selfText = `自行出營：${goSelf.length}員
+  
+  學號如下：${goSelf.join("、")}
 
-  學號如下：${fromSelfArray.sort().join("、")}
+
+  自行入營：${fromSelf.length}員
+  
+  學號如下：${fromSelf.join("、")}
   `
+
+
+      let noText = notFillOut.join("、");
 
       document.getElementById("CarTextarea").value = carText;
       document.getElementById("SelfTextarea").value = selfText;
+      document.getElementById("notInList").innerHTML = noText;
+    }
+    /* 列出離營下車各地點之人員，已排序 */
+    function go(data, go_place) {
+      const before = Date.now();
+      const go = data.filter(data => data["離營下車的地點"] === go_place)
+        .map(data => data["id"])
+        .sort();
+      return go;
+    }
+    /* 列出回營上車各地點之人員，已排序 */
+    function from(data, from_place) {
+      const from = data.filter(data => data["回營上車的地點"] === from_place)
+        .map(data => data["id"])
+        .sort();
+      return from;
+    }
+    /* 列出未填表單的學號 */
+    function notInList(data) {
+      const headCount = parseInt(document.getElementById('headCount').value);
+      let all_Ids = [];
+      for (let i = 1; i <= headCount; i++) {
+        let all = { "未填表單學號": i.toString().padStart(3, '0') };
+        all_Ids.push(all);
+      }
+      const select = all_Ids.filter(ids => !data.find(data => ids["未填表單學號"] === data["id"]));
+      const result = select.map(data => data["未填表單學號"]);
+      return result;
     }
 
     function csvJSON(csv) {
+      // Split data into lines and separate headers from actual data
+      // using Array spread operator
+      const [headerLine, ...lines] = csv.split(/\r?\n(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/);
 
-      var lines = csv.split("\n");
-      var result = [];
-      var headers = lines[0].split(",");
-
-      for (var i = 1; i < lines.length; i++) {
-        var obj = {};
-
-        var row = lines[i],
-          queryIdx = 0,
-          startValueIdx = 0,
-          idx = 0;
-
-        if (row.trim() === '') { continue; }
-
-        while (idx < row.length) {
-          /* if we meet a double quote we skip until the next one */
-          var c = row[idx];
-
-          if (c === '"') {
-            do { c = row[++idx]; } while (c !== '"' && idx < row.length - 1);
-          }
-
-          if (c === ',' || /* handle end of line with no comma */ idx === row.length - 1) {
-            /* we've got a value */
-            var value = row.substr(startValueIdx, idx - startValueIdx).trim();
-
-            /* skip first double quote */
-            if (value[0] === '"') { value = value.substr(1); }
-            /* skip last comma */
-            if (value[value.length - 1] === ',') { value = value.substr(0, value.length - 1); }
-            /* skip last double quote */
-            if (value[value.length - 1] === '"') { value = value.substr(0, value.length - 1); }
-
-            var key = headers[queryIdx++];
-            obj[key] = value;
-            startValueIdx = idx + 1;
-          }
-
-          ++idx;
-        }
-
-        result.push(obj);
+      for (let i in lines) {
+        lines[i] = JSON.parse(JSON.stringify(lines[i].replace(/\r\n/g, '').replace(/\r/g, '').replace(/\n/g, '')));
       }
+
+      // Use common line separator, which parses each line as the contents of a JSON array
+      const parseLine = (line) => JSON.parse(`[${line}]`);
+
+      // Split headers line into an array
+      const headers = parseLine(headerLine);
+
+      // Create objects from parsing lines
+      // There will be as much objects as lines
+      const result = lines
+        .map((line, index) =>
+
+          // Split line with JSON
+          parseLine(line)
+
+            // Reduce values array into an object like: { [header]: value } 
+            .reduce(
+              (object, value, index) => ({
+                ...object,
+                [headers[index]]: value,
+              }),
+              {}
+            )
+        );
       return result;
     }
   </script>
