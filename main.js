@@ -1,6 +1,12 @@
 // changeJSON
 let csvJson = "";
-let newCsvJson = "";
+let dataCSVJson = {};
+
+// 所有人數
+let allMemberCount = 0;
+
+// 未填寫表單成員
+let notFillOutArray = [];
 
 // 基隆離營
 let goKeelungArray = [];
@@ -32,10 +38,6 @@ let goSelfArray = [];
 // 自行入營
 let fromSelfArray = [];
 
-// 未填表單
-
-let notFillOutArray = [];
-
 window.onload = (event) => {
   main();
 }
@@ -58,25 +60,64 @@ function main() {
   const inputFile = document.querySelector("input[type='file']");
 
   inputFile.onchange = (event) => {
+
+    // 取得總人數
+    allMemberCount = parseInt(document.getElementById('HeadCountInput').value);
+    // 建立總人數名單
+    notFillOutArray = [];
+    for (let i = 1; i <= allMemberCount; i += 1) {
+      notFillOutArray.push(i.toString().padStart(3, '0'));
+    }
+
     const file = inputFile.files[0];
 
     const fileReader = new FileReader();
     fileReader.readAsText(file, "utf-8");
 
     fileReader.onload = (event) => {
-      console.log(event, fileReader);
+      // console.log(event, fileReader);
       document.getElementById('file-name').innerHTML = file.name;
       csvJson = csvJSON(fileReader.result);
+      // 更換Key名稱
+      let newCsvJson = changeIdKey(csvJson);
+      // 檢查名單是否重複
+      dataCSVJson = checkAllMemberInArray(newCsvJson);
+      console.log(dataCSVJson);
 
-      console.log(csvJson);
-
-      newCsvJson = changeIdKey(csvJson);
-      console.log(newCsvJson);
-
-      outputJSON(newCsvJson);
+      outputJSON(dataCSVJson);
     }
   }
 }
+
+// 檢查名單是否重複
+function checkAllMemberInArray(tempJson) {
+
+  let repeatAry = [];
+
+  for (key in tempJson) {
+
+    if (notFillOutArray.indexOf(tempJson[key]['id'].toString()) !== -1) {
+      notFillOutArray.splice(notFillOutArray.indexOf(tempJson[key]['id']), 1);
+    }
+    else {
+      if (parseInt(tempJson[key]['id']) <= allMemberCount) {
+        console.log(`重複號碼 : ${tempJson[key]['id']}`);
+        repeatAry.push(tempJson[key]['id']);
+      }
+    }
+  }
+  // 刪除重複名單中最早的填寫資料
+  for (let i = 0; i <= repeatAry.length; i += 1) {
+    for (key in tempJson) {
+      if (repeatAry[i] === tempJson[key]['id']) {
+        tempJson.splice(key, 1);
+        break
+      }
+    }
+  }
+  return tempJson
+}
+
 /* 修改「你的學號?」欄位為「id」*/
 function changeIdKey(data) {
   let result;
@@ -108,8 +149,6 @@ function outputJSON(data) {
 
   goSelfArray = addPlaceArrayFunc(data, "不搭乘離營車，將自行出營", 1);
   fromSelfArray = addPlaceArrayFunc(data, "不搭乘入營車，將自行回營", 2);
-
-  notFillOutArray = notInList(data);
 
   let startDate = document.getElementById("startDate").value.slice(5).replace('-', '/');
   let endDate = document.getElementById("endDate").value.slice(5).replace('-', '/');
@@ -167,7 +206,8 @@ function outputJSON(data) {
 
   document.getElementById("CarTextarea").value = carText;
   document.getElementById("SelfTextarea").value = selfText;
-  document.getElementById("notInList").innerText = notFillOutArray.join("、");
+
+  document.getElementById("notInList").innerHTML = notFillOutArray.join("、");
 }
 
 function addPlaceArrayFunc(data, placeText, addType) {
@@ -182,20 +222,6 @@ function addPlaceArrayFunc(data, placeText, addType) {
 
   let tempAry = data.filter(data => data[typeText] === placeText).map(data => data["id"]).sort();
   return tempAry;
-}
-
-/* 列出未填表單的學號 */
-function notInList(data) {
-  const headCount = parseInt(document.getElementById('HeadCountInput').value);
-  let allIdArray = [];
-
-  for (let i = 1; i <= headCount; i++) {
-    let allIdObj = { "未填表單學號": i.toString().padStart(3, '0') };
-    allIdArray.push(allIdObj);
-  }
-  const select = allIdArray.filter(ids => !data.find(data => ids["未填表單學號"] === data["id"]));
-  const result = select.map(data => data["未填表單學號"]);
-  return result;
 }
 
 function csvJSON(csv) {
