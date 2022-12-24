@@ -1,0 +1,107 @@
+* {
+  box-sizing: border-box;
+  font-size: 12pt;
+  font-family: sans-serif;
+}
+
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #78866B;
+}
+
+a {
+  color: unset;
+  text-decoration: none;
+}
+
+i {
+  padding-right: 15px;
+  font-size: 26pt;
+}
+
+input {
+  border-radius: 6px;
+}
+
+textarea {
+  border-radius: 6px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.title-nav {
+  padding: 20px 0;
+  font-size: 16pt;
+  text-align: center;
+  font-weight: 600;
+  color: white;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #78866B;
+  padding: 10px 0;
+  margin-top: 20px;
+}
+
+.footer-group>.title {
+  font-size: 18pt;
+  color: white;
+  padding: 15px 0;
+}
+
+.footer-group>.content {
+  font-size: 14pt;
+  color: white;
+  line-height: 18pt;
+  text-align: center;
+}
+
+.footer-group>.icon {
+  font-size: 18pt;
+}
+
+.footer-title {
+  font-size: 18pt;
+  color: white;
+  line-height: 18pt;
+  text-align: center;
+}
+
+.middleFlex {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  row-gap: 10px;
+}
+
+input[type="file"] {
+  position: fixed;
+  right: 100%;
+  bottom: 100%;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.textPadding {
+  padding: 10px 0;
+}
