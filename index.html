@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="main.css?v=20221224">
+  <link rel="stylesheet" type="text/css" href="main.css?v=20221225">
   <link rel="icon" href="Icon/icon.ico">
   <link rel="apple-touch-icon" href="Icon/icon.ico">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,7 +25,7 @@
 
         <div>
           <span>人數：</span>
-          <input id="HeadCountInput" style="width: 80px;" value="154"></input>
+          <input id="AllMemberCountInput" style="width: 80px;" value="154"></input>
         </div>
 
         <div>
@@ -37,6 +37,12 @@
           <span>收假日期：</span>
           <input id="endDate" type="date">
         </div>
+
+        <div>
+          <span>輸出：</span>
+          <input id="NumberKeyInput" type="text" value="你的學號?">
+        </div>
+
       </div>
 
       <div class="middleFlex" style="padding:10px 0;">
@@ -45,7 +51,7 @@
             <i class="fa fa-cloud-upload"></i>
             <span id="file-name" style="padding: 20px 0;">請選擇檔案(副檔名：csv)</span>
           </label>
-          <input id="file-upload" type="file" accept="text/csv" onclick="reset()">
+          <input id="file-upload" type="file" accept="text/csv" onclick="reset();">
         </form>
       </div>
 
