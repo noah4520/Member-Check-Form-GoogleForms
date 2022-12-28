@@ -1,6 +1,7 @@
 // changeJSON
 let csvJson = "";
 let dataCSVJson = {};
+let outputCSVJson = {};
 
 // 所有人數
 let allMemberCount = 0;
@@ -8,38 +9,11 @@ let allMemberCount = 0;
 // 未填寫表單成員
 let notFillOutArray = [];
 
-// 基隆離營
-let goKeelungArray = [];
-
-// 基隆入營
-let fromKeelungArray = [];
-
-// 桃園離營
-let goTaoyuanArray = [];
-
-// 桃園入營
-let fromTaoyuanArray = [];
-
-// 苗栗離營
-let goMiaoliArray = [];
-
-// 苗栗入營
-let fromMiaoliArray = [];
-
-// 台中離營
-let goTaichungArray = [];
-
-// 台中入營
-let fromTaichungArray = [];
-
-// 自行出營
-let goSelfArray = [];
-
-// 自行入營
-let fromSelfArray = [];
-
 // 輸出項目(你的學號?)
 let outPutKeyText = "";
+
+// 對輸出項目分組
+let groupByKeyAry = [];
 
 window.onload = (event) => {
   main();
@@ -66,7 +40,11 @@ function main() {
   inputFile.onchange = (event) => {
 
     // 取得要輸出的key
-    outPutKeyText = document.getElementById("NumberKeyInput").value;
+    outPutKeyText = document.getElementById("IdKeyInput").value;
+    // 取得輸出分組順序的key
+    for (let key of document.getElementsByClassName("GroupByKeyInput")) {
+      groupByKeyAry.push(key.value);
+    }
 
     // 取得總人數
     allMemberCount = parseInt(document.getElementById("AllMemberCountInput").value);
@@ -92,7 +70,11 @@ function main() {
       dataCSVJson = checkAllMemberInArray(csvJson);
       console.log(dataCSVJson);
 
-      outputJSON(dataCSVJson);
+      // 篩選需要輸出的項目與資料分組
+      outputCSVJson = outputArrayFunc(dataCSVJson);
+      console.log(outputCSVJson);
+
+      outputJSON(outputCSVJson);
     }
   }
 }
@@ -128,81 +110,111 @@ function checkAllMemberInArray(tempJson) {
 
 function outputJSON(data) {
 
-  goKeelungArray = addPlaceArrayFunc(data, "基隆 $250", 1);
-  fromKeelungArray = addPlaceArrayFunc(data, "基隆 $250", 2);
-
-  goTaoyuanArray = addPlaceArrayFunc(data, "桃園 $200", 1);
-  fromTaoyuanArray = addPlaceArrayFunc(data, "桃園 $200", 2);
-
-  goMiaoliArray = addPlaceArrayFunc(data, "苗栗 $200", 1);
-  fromMiaoliArray = addPlaceArrayFunc(data, "苗栗 $200", 2);
-
-  goTaichungArray = addPlaceArrayFunc(data, "台中 $250", 1);
-  fromTaichungArray = addPlaceArrayFunc(data, "台中 $250", 2);
-
-  goSelfArray = addPlaceArrayFunc(data, "不搭乘離營車，將自行出營", 1);
-  fromSelfArray = addPlaceArrayFunc(data, "不搭乘入營車，將自行回營", 2);
-
   let startDate = document.getElementById("startDate").value.slice(5).replace('-', '/');
   let endDate = document.getElementById("endDate").value.slice(5).replace('-', '/');
+
+  /*
+  ●${startDate} 休假，總人數${goKeelungArray.length + goTaoyuanArray.length + goMiaoliArray.length + goTaichungArray.length}人
+  
+  1.基隆：${goKeelungArray.length}員
+  
+    學號如下：${goKeelungArray.join("、")}
+  
+  2.桃園：${goTaoyuanArray.length}員
+  
+    學號如下：${goTaoyuanArray.join("、")}
+  
+  3.苗栗：${goMiaoliArray.length}員
+  
+    學號如下：${goMiaoliArray.join("、")}
+  
+  4.臺中：${goTaichungArray.length}員 
+  
+    學號如下：${goTaichungArray.join("、")}
+  
+  
+  ●${endDate} 收假，總人數${fromKeelungArray.length + fromTaoyuanArray.length + fromMiaoliArray.length + fromTaichungArray.length}人
+  
+  1.基隆：${fromKeelungArray.length}員
+  
+    學號如下：${fromKeelungArray.join("、")}
+  
+  2.桃園：${fromTaoyuanArray.length}員
+  
+    學號如下：${fromTaoyuanArray.join("、")}
+  
+  3.苗栗：${fromMiaoliArray.length}員
+  
+    學號如下：${fromMiaoliArray.join("、")}
+  
+  4.臺中：${fromTaichungArray.length}員
+  
+    學號如下：${fromTaichungArray.join("、")}`
+  
+  
+  let selfText = `自行出營：${goSelfArray.length}員
+  
+  學號如下：${goSelfArray.join("、")}
+  
+  
+  自行入營：${fromSelfArray.length}員
+  
+  學號如下：${fromSelfArray.join("、")}
+  `
+  */
 
   let carText =
     `${document.getElementById("battalion").value}：
 
-●${startDate} 休假，總人數${goKeelungArray.length + goTaoyuanArray.length + goMiaoliArray.length + goTaichungArray.length}人
+●${startDate} 休假，總人數${data[0].memberCount}人\n\n`;
 
-1.基隆：${goKeelungArray.length}員
+  let selfText = "";
+  let listNum = 1;
 
-  學號如下：${goKeelungArray.join("、")}
+  // data[0]對應輸出分組順序1
+  data[0]["data"].forEach(data => {
+    if (data["place"].slice(0, 2) === "不搭") {
+      selfText +=
+        `自行出營：${data["id"].length}員
 
-2.桃園：${goTaoyuanArray.length}員
+學號如下：${data["id"].sort().join("、")}\n\n`;
+      return;
+    }
+    else {
+      carText +=
+        `${listNum++}. ${data["place"].slice(0, 2)}： ${data["id"].length}員
+            
+學號如下：${data["id"].sort().join("、")}\n\n`;
+    }
+  });
 
-  學號如下：${goTaoyuanArray.join("、")}
+  carText += `●${endDate} 收假，總人數${data[1].memberCount}人\n\n`;
+  listNum = 1;
 
-3.苗栗：${goMiaoliArray.length}員
-
-  學號如下：${goMiaoliArray.join("、")}
-
-4.臺中：${goTaichungArray.length}員 
-
-  學號如下：${goTaichungArray.join("、")}
-
-
-●${endDate} 收假，總人數${fromKeelungArray.length + fromTaoyuanArray.length + fromMiaoliArray.length + fromTaichungArray.length}人
-
-1.基隆：${fromKeelungArray.length}員
-
-  學號如下：${fromKeelungArray.join("、")}
-
-2.桃園：${fromTaoyuanArray.length}員
-
-  學號如下：${fromTaoyuanArray.join("、")}
-
-3.苗栗：${fromMiaoliArray.length}員
-
-  學號如下：${fromMiaoliArray.join("、")}
-
-4.臺中：${fromTaichungArray.length}員
-
-  學號如下：${fromTaichungArray.join("、")}`
-
-
-  let selfText = `自行出營：${goSelfArray.length}員
-
-學號如下：${goSelfArray.join("、")}
-
-
-自行入營：${fromSelfArray.length}員
-
-學號如下：${fromSelfArray.join("、")}
-`
+  // data[1]對應輸出分組順序2
+  data[1]["data"].forEach(data => {
+    if (data["place"].slice(0, 2) === "不搭") {
+      selfText +=
+        `自行入營：${data["id"].length}員
+      
+學號如下：${data["id"].sort().join("、")}`;
+      return;
+    }
+    else {
+      carText +=
+        `${listNum++}. ${data["place"].slice(0, 2)}： ${data["id"].length}員
+            
+學號如下：${data["id"].sort().join("、")}\n\n`;
+    }
+  });
 
   document.getElementById("CarTextarea").value = carText;
   document.getElementById("SelfTextarea").value = selfText;
 
-  document.getElementById("notInList").innerHTML = notFillOutArray.join("、");
+  document.getElementById("notInList").innerText = notFillOutArray.join("、");
 }
 
+/*
 function addPlaceArrayFunc(data, placeText, addType) {
 
   let typeText = "";
@@ -216,6 +228,47 @@ function addPlaceArrayFunc(data, placeText, addType) {
 
   let tempAry = data.filter(data => data[typeText] === placeText).map(data => data[outPutKeyText]).sort();
   return tempAry;
+}
+*/
+
+function outputArrayFunc(data) {
+
+  let campAry = [];
+  let tempObj = {};
+  // 分別對不同的輸出分組順序進行分組
+  for (key in groupByKeyAry) {
+    let memberCount = 0;
+    tempObj = (data.map(data => ({ place: data[groupByKeyAry[key]], id: data[outPutKeyText] }))
+      .reduce((groupByPlace, data) => {
+
+        const index = groupByPlace.findIndex(AryItem => AryItem.place === data.place);
+
+        if (index === -1) {
+          groupByPlace.push({
+            place: data.place,
+            id: [data.id],
+          });
+        }
+        else {
+          groupByPlace[index].id.push(data.id);
+        }
+        return groupByPlace;
+      }, []));
+
+    //計算除了自行出入以外的總人數
+    tempObj.forEach(data => {
+
+      if (data["place"].slice(0, 2) === "不搭") {
+        return;
+      }
+      else {
+        memberCount += data["id"].length;
+      }
+    });
+    campAry.push({ data: tempObj, memberCount: memberCount });
+  }
+
+  return campAry;
 }
 
 function csvJSON(csv) {
