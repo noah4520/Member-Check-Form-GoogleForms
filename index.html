@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="main.css?v=20221225">
+  <link rel="stylesheet" type="text/css" href="main.css?v=20221229">
   <link rel="icon" href="Icon/icon.ico">
   <link rel="apple-touch-icon" href="Icon/icon.ico">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -69,7 +69,7 @@
         <div>
           <div class="middleFlex">
             <div class="textPadding">搭乘專車：</div>
-            <button id="CarTextBtn">Copy</button>
+            <button id="CarTextBtn" data-clipboard-target="#CarText">Copy</button>
           </div>
 
           <section id="CarText" style="display: flex; flex-direction: column;">
@@ -83,7 +83,7 @@
         <div>
           <div class="middleFlex">
             <div class="textPadding">自行出入：</div>
-            <button id="SelfTextBtn">Copy</button>
+            <button id="SelfTextBtn" data-clipboard-target="#SelfText">Copy</button>
           </div>
 
           <section id="SelfText" style="display: flex; flex-direction: column;">
@@ -113,6 +113,7 @@
 
   <script src="https://kit.fontawesome.com/978ee80c9d.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
   <script type="text/javascript" src="main.js?v=20221225"></script>
 </body>
 

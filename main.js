@@ -16,9 +16,11 @@ let outPutKeyText = "";
 let groupByKeyAry = [];
 
 window.onload = (event) => {
+  new ClipboardJS('#CarTextBtn');
+  new ClipboardJS('#SelfTextBtn');
   main();
 }
-
+/*
 const select = (DOM) => document.querySelector(DOM);
 
 select('#CarTextBtn').addEventListener('click', () => {
@@ -32,16 +34,20 @@ select('#SelfTextBtn').addEventListener('click', () => {
   document.execCommand("copy");
   alert("複製成功！");
 })
-
+*/
 function main() {
 
   const inputFile = document.querySelector("input[type='file']");
 
   inputFile.onchange = (event) => {
 
+    document.getElementById("CarText").innerText = "";
+    document.getElementById("SelfText").innerText = "";
+
     // 取得要輸出的key
     outPutKeyText = document.getElementById("IdKeyInput").value;
     // 取得輸出分組順序的key
+    groupByKeyAry = [];
     for (let key of document.getElementsByClassName("GroupByKeyInput")) {
       groupByKeyAry.push(key.value);
     }
