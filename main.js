@@ -110,6 +110,16 @@ function checkAllMemberInArray(tempJson) {
 
 function outputJSON(data) {
 
+  new Sortable(document.getElementById("CarText"), {
+    ghostClass: 'blue-background-class',
+    animation: 150,
+  });
+
+  new Sortable(document.getElementById("SelfText"), {
+    ghostClass: 'blue-background-class',
+    animation: 150,
+  });
+
   let startDate = document.getElementById("startDate").value.slice(5).replace('-', '/');
   let endDate = document.getElementById("endDate").value.slice(5).replace('-', '/');
 
@@ -168,68 +178,93 @@ function outputJSON(data) {
 
 ●${startDate} 休假，總人數${data[0].memberCount}人\n\n`;
 
+  createDivList(carText, "car");
   let selfText = "";
   let listNum = 1;
 
   // data[0]對應輸出分組順序1
   data[0]["data"].forEach(data => {
     if (data["place"].slice(0, 2) === "不搭") {
-      selfText +=
+      selfText =
         `自行出營：${data["id"].length}員
 
-學號如下：${data["id"].sort().join("、")}\n\n`;
+學號如下：${data["id"].sort().join("、")}\n`;
+      createDivList(selfText, "self");
       return;
     }
     else {
-      carText +=
-        `${listNum++}. ${data["place"].slice(0, 2)}： ${data["id"].length}員
+      carText =
+        `\n${listNum++}. ${data["place"].slice(0, 2)}： ${data["id"].length}員
             
-學號如下：${data["id"].sort().join("、")}\n\n`;
+學號如下：${data["id"].sort().join("、")}\n`;
+      createDivList(carText, "car");
     }
   });
 
-  carText += `●${endDate} 收假，總人數${data[1].memberCount}人\n\n`;
+  carText = `\n●${endDate} 收假，總人數${data[1].memberCount}人\n\n`;
+  createDivList(carText, "car");
+
   listNum = 1;
 
   // data[1]對應輸出分組順序2
   data[1]["data"].forEach(data => {
     if (data["place"].slice(0, 2) === "不搭") {
-      selfText +=
-        `自行入營：${data["id"].length}員
-      
-學號如下：${data["id"].sort().join("、")}`;
+      selfText =
+        `\n自行入營：${data["id"].length}員
+
+學號如下：${data["id"].sort().join("、")}\n`;
+      createDivList(selfText, "self");
       return;
     }
     else {
-      carText +=
-        `${listNum++}. ${data["place"].slice(0, 2)}： ${data["id"].length}員
+      carText =
+        `\n${listNum++}. ${data["place"].slice(0, 2)}： ${data["id"].length}員
             
-學號如下：${data["id"].sort().join("、")}\n\n`;
+學號如下：${data["id"].sort().join("、")}\n`;
+      createDivList(carText, "car");
     }
   });
 
-  document.getElementById("CarTextarea").value = carText;
-  document.getElementById("SelfTextarea").value = selfText;
+  // document.getElementById("CarTextarea").value = carText;
+  // document.getElementById("SelfTextarea").value = selfText;
 
   document.getElementById("notInList").innerText = notFillOutArray.join("、");
 }
 
 /*
 function addPlaceArrayFunc(data, placeText, addType) {
-
+ 
   let typeText = "";
-
+ 
   if (addType === 1) {
     typeText = "離營下車的地點";
   }
   if (addType === 2) {
     typeText = "回營上車的地點";
   }
-
+ 
   let tempAry = data.filter(data => data[typeText] === placeText).map(data => data[outPutKeyText]).sort();
   return tempAry;
 }
 */
+
+//建立新的可拉動 div 區塊
+function createDivList(content, addType) {
+
+  let typeText = "";
+
+  if (addType === "car") {
+    typeText = "CarText";
+  }
+  if (addType === "self") {
+    typeText = "SelfText";
+  }
+  const div = document.createElement("div");
+  div.className = ("list-item");
+  div.style = "white-space: pre-wrap;";
+  div.append(content);
+  document.getElementById(typeText).appendChild(div);
+}
 
 function outputArrayFunc(data) {
 
