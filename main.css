@@ -84,6 +84,15 @@ input {
   row-gap: 10px;
 }
 
+.carList {
+  counter-reset: css-counter 0;
+}
+
+.carList > .list-item::before {
+  content: counter(css-counter) ". ";
+  counter-increment: css-counter 1;
+}
+
 .list-item {
   border: 1px solid #ccc;
   margin-bottom: -1px;

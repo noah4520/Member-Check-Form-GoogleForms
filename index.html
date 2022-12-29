@@ -65,19 +65,24 @@
         </form>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(2,1fr); column-gap: 20px; padding-bottom: 200px;">
+      <div style="display: grid; padding-bottom: 200px;">
+
+        <div>
+          <div class="textPadding">未填表單學號：</div>
+          <label id="notInList"></label>
+        </div>
+
         <div>
           <div class="middleFlex">
             <div class="textPadding">搭乘專車：</div>
             <button id="CarTextBtn" data-clipboard-target="#CarText">Copy</button>
           </div>
 
-          <section id="CarText" style="display: flex; flex-direction: column;">
+          <article id="CarText">
+            <section class="carList" id="Car-LeaveCamp-List" style="display: flex; flex-direction: column;"></section>
+            <section class="carList" id="Car-BackCamp-List" style="display: flex; flex-direction: column;"></section>
+          </article>
 
-          </section>
-
-          <div class="textPadding">未填表單學號：</div>
-          <label id="notInList"></label>
         </div>
 
         <div>
@@ -86,7 +91,9 @@
             <button id="SelfTextBtn" data-clipboard-target="#SelfText">Copy</button>
           </div>
 
-          <section id="SelfText" style="display: flex; flex-direction: column;">
+          <article>
+            <section id="SelfText" style="display: flex; flex-direction: column;">
+          </article>
 
           </section>
         </div>

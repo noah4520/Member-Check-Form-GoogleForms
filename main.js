@@ -41,7 +41,8 @@ function main() {
 
   inputFile.onchange = (event) => {
 
-    document.getElementById("CarText").innerText = "";
+    document.getElementById("Car-LeaveCamp-List").innerText = "";
+    document.getElementById("Car-BackCamp-List").innerText = "";
     document.getElementById("SelfText").innerText = "";
 
     // 取得要輸出的key
@@ -116,7 +117,13 @@ function checkAllMemberInArray(tempJson) {
 
 function outputJSON(data) {
 
-  new Sortable(document.getElementById("CarText"), {
+  new Sortable(document.getElementById("Car-LeaveCamp-List"), {
+    filter: "#ListTitle",
+    ghostClass: 'blue-background-class',
+    animation: 150,
+  });
+
+  new Sortable(document.getElementById("Car-BackCamp-List"), {
     ghostClass: 'blue-background-class',
     animation: 150,
   });
@@ -184,7 +191,8 @@ function outputJSON(data) {
 
 ●${startDate} 休假，總人數${data[0].memberCount}人\n\n`;
 
-  createDivList(carText, "car");
+  createDivList(carText, "Car-LeaveCamp");
+
   let selfText = "";
   let listNum = 1;
 
@@ -200,15 +208,15 @@ function outputJSON(data) {
     }
     else {
       carText =
-        `\n${listNum++}. ${data["place"].slice(0, 2)}： ${data["id"].length}員
+        `${data["place"].slice(0, 2)}： ${data["id"].length}員
             
-學號如下：${data["id"].sort().join("、")}\n`;
-      createDivList(carText, "car");
+學號如下：${data["id"].sort().join("、")}\n\n`;
+      createDivList(carText, "Car-LeaveCamp");
     }
   });
 
   carText = `\n●${endDate} 收假，總人數${data[1].memberCount}人\n\n`;
-  createDivList(carText, "car");
+  createDivList(carText, "Car-BackCamp");
 
   listNum = 1;
 
@@ -218,16 +226,16 @@ function outputJSON(data) {
       selfText =
         `\n自行入營：${data["id"].length}員
 
-學號如下：${data["id"].sort().join("、")}\n`;
+學號如下：${data["id"].sort().join("、")}\n\n`;
       createDivList(selfText, "self");
       return;
     }
     else {
       carText =
-        `\n${listNum++}. ${data["place"].slice(0, 2)}： ${data["id"].length}員
+        `${data["place"].slice(0, 2)}： ${data["id"].length}員
             
 學號如下：${data["id"].sort().join("、")}\n`;
-      createDivList(carText, "car");
+      createDivList(carText, "Car-BackCamp");
     }
   });
 
@@ -259,11 +267,28 @@ function createDivList(content, addType) {
 
   let typeText = "";
 
+  /*
   if (addType === "car") {
     typeText = "CarText";
   }
   if (addType === "self") {
     typeText = "SelfText";
+  }
+  */
+
+  switch (addType) {
+    case 'Car-LeaveCamp': {
+      typeText = "Car-LeaveCamp-List";
+      break;
+    }
+    case 'Car-BackCamp': {
+      typeText = "Car-BackCamp-List";
+      break;
+    }
+    case 'self': {
+      typeText = "SelfText";
+      break;
+    }
   }
   const div = document.createElement("div");
   div.className = ("list-item");
