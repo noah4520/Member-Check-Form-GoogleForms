@@ -37,6 +37,22 @@ select('#SelfTextBtn').addEventListener('click', () => {
 */
 function main() {
 
+  new Sortable(document.getElementById("Car-LeaveCamp-List"), {
+    filter: "#ListTitle",
+    ghostClass: 'blue-background-class',
+    animation: 150,
+  });
+
+  new Sortable(document.getElementById("Car-BackCamp-List"), {
+    ghostClass: 'blue-background-class',
+    animation: 150,
+  });
+
+  new Sortable(document.getElementById("SelfText"), {
+    ghostClass: 'blue-background-class',
+    animation: 150,
+  });
+
   const inputFile = document.querySelector("input[type='file']");
 
   inputFile.onchange = (event) => {
@@ -116,22 +132,6 @@ function checkAllMemberInArray(tempJson) {
 }
 
 function outputJSON(data) {
-
-  new Sortable(document.getElementById("Car-LeaveCamp-List"), {
-    filter: "#ListTitle",
-    ghostClass: 'blue-background-class',
-    animation: 150,
-  });
-
-  new Sortable(document.getElementById("Car-BackCamp-List"), {
-    ghostClass: 'blue-background-class',
-    animation: 150,
-  });
-
-  new Sortable(document.getElementById("SelfText"), {
-    ghostClass: 'blue-background-class',
-    animation: 150,
-  });
 
   let startDate = document.getElementById("startDate").value.slice(5).replace('-', '/');
   let endDate = document.getElementById("endDate").value.slice(5).replace('-', '/');
