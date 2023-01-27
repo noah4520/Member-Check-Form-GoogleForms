@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="main.css?v=20221229">
+  <link rel="stylesheet" type="text/css" href="main.css?v=20230127">
   <link rel="icon" href="Icon/icon.ico">
   <link rel="apple-touch-icon" href="Icon/icon.ico">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -40,17 +40,17 @@
 
         <div>
           <span>輸出項目：</span>
-          <input id="IdKeyInput" type="text" value="你的學號?">
+          <input id="IdKeyInput" type="text" value="學號">
         </div>
 
         <div>
-          <span>輸出分組順序1：</span>
-          <input class="GroupByKeyInput" type="text" value="離營下車的地點">
+          <span>出營方式的表單標題：</span>
+          <input class="GroupByKeyInput" type="text" value="下車地點">
         </div>
 
         <div>
-          <span>輸出分組順序2：</span>
-          <input class="GroupByKeyInput" type="text" value="回營上車的地點">
+          <span>回營方式的表單標題：</span>
+          <input class="GroupByKeyInput" type="text" value="上車地點">
         </div>
 
       </div>
@@ -74,30 +74,29 @@
 
         <div>
           <div class="middleFlex">
-            <div class="textPadding">搭乘專車：</div>
             <button id="CarTextBtn" data-clipboard-target="#CarText">Copy</button>
           </div>
 
-          <article id="CarText">
-            <section class="carList" id="Car-LeaveCamp-List" style="display: flex; flex-direction: column;"></section>
-            <section class="carList" id="Car-BackCamp-List" style="display: flex; flex-direction: column;"></section>
-          </article>
+          <div id="CarText">
+            <div>
+              <div id="LeaveListTitle"></div>
+              <ul class="campList" id="LeaveCampList"></ul>
+            </div>
+
+            <div>
+              <div id="BackListTitle"></div>
+              <ul class="campList" id="BackCampList"></ul>
+            </div>
+          </div>
 
         </div>
 
-        <div>
+        <!-- <div>
           <div class="middleFlex">
             <div class="textPadding">自行出入：</div>
             <button id="SelfTextBtn" data-clipboard-target="#SelfText">Copy</button>
           </div>
-
-          <article>
-            <section id="SelfText" style="display: flex; flex-direction: column;">
-          </article>
-
-          </section>
-        </div>
-
+        </div> -->
       </div>
     </div>
   </main>
@@ -121,7 +120,7 @@
   <script src="https://kit.fontawesome.com/978ee80c9d.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
-  <script type="text/javascript" src="main.js?v=20221225"></script>
+  <script type="text/javascript" src="main.js?v=20230127"></script>
 </body>
 
 </html>

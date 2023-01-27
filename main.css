@@ -84,13 +84,16 @@ input {
   row-gap: 10px;
 }
 
-.carList {
-  counter-reset: css-counter 0;
+ul,
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.carList > .list-item::before {
-  content: counter(css-counter) ". ";
-  counter-increment: css-counter 1;
+.carList {
+  display: flex;
+  flex-direction: column;
 }
 
 .list-item {
