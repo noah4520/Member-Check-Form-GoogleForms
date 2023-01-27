@@ -38,6 +38,12 @@ function main() {
 
   const inputFile = document.querySelector("input[type='file']");
 
+  setLocalStorage("#battalion");
+  setLocalStorage("#AllMemberCountInput");
+  setLocalStorage("#IdKeyInput");
+  setLocalStorage("#LeaveTitleInput");
+  setLocalStorage("#BackTitleInput");
+
   inputFile.onchange = (event) => {
 
     document.getElementById("LeaveCampList").innerText = "";
@@ -200,6 +206,17 @@ function outputArrayFunc(data) {
   }
 
   return campAry;
+}
+
+function setLocalStorage(str) {
+
+  if (localStorage.getItem(str.slice(1)) !== null) {
+    document.querySelector(str).value = localStorage.getItem(str.slice(1));
+  }
+
+  document.querySelector(str).onchange = (event) => {
+    localStorage.setItem(str.slice(1), document.querySelector(str).value);
+  }
 }
 
 function csvJSON(csv) {
