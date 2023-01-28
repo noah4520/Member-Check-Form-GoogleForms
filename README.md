@@ -1,8 +1,12 @@
 # 國軍Online專車人數統計 訊息產生器
 第163梯 206旅2營一連 製作，看這個工具可以傳承多久XD
 
-## 使用網址
+## 測試網址
+### 網址
 https://206r2b-form.netlify.app
+
+### 表單副本（複製副本到自己的雲端硬碟後自行修改）
+https://drive.google.com/drive/folders/1MQ6Lbw1ofsLP5VpdzDJN2K23G3cU5L5J?usp=share_link
 
 ## 這個網站可以做什麼?
 透過Google表單統計後，直接將表單結果匯出成CVS
