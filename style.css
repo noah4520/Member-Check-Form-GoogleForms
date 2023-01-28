@@ -1,0 +1,51 @@
+.groupTitle {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+}
+
+.groupTitle>.titleText {
+  padding: 20px 0 5px 0;
+  font-weight: 600;
+  color: #777;
+}
+
+.arrowButton {
+  padding: 10px 10px 0 10px;
+}
+
+.arrowButton>.arrow_1 {
+  border-bottom: 2px solid gray;
+  width: 10px;
+  transform: rotate(45deg);
+  position: relative;
+  top: -5px;
+  right: 3px;
+}
+
+.arrowButton>.arrow_2 {
+  border-bottom: 2px solid gray;
+  width: 10px;
+  transform: rotate(-45deg);
+  position: relative;
+  top: -7px;
+  right: -3px;
+}
+
+.arrowButton.active>.arrow_1 {
+  border-bottom: 2px solid gray;
+  width: 10px;
+  transform: rotate(-45deg);
+  position: relative;
+  top: -5px;
+  right: 3px;
+}
+
+.arrowButton.active>.arrow_2 {
+  border-bottom: 2px solid gray;
+  width: 10px;
+  transform: rotate(45deg);
+  position: relative;
+  top: -7px;
+  right: -3px;
+}

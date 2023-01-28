@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="main.css?v=20230127">
+  <link rel="stylesheet" type="text/css" href="style.css?v=20230128">
   <link rel="icon" href="Icon/icon.ico">
   <link rel="apple-touch-icon" href="Icon/icon.ico">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,90 +14,134 @@
 </head>
 
 <body>
-  <header class="title-nav">206旅二營一連 專車統計訊息產生器</header>
+  <header class="title-nav">國軍Online專車人數統計 訊息產生器</header>
 
   <main style="background-color: white;">
     <div class="container">
-      <div class="middleFlex" style="padding: 20px 0;">
-        <div>
-          <span>單位：</span>
-          <input id="battalion" style="width: 80px;" value="一連"></input>
-        </div>
 
-        <div>
-          <span>人數：</span>
-          <input type="number" id="AllMemberCountInput" style="width: 80px;" value="154"></input>
-        </div>
-
-        <div>
-          <span>放假日期：</span>
-          <input id="startDate" type="date">
-        </div>
-
-        <div>
-          <span>收假日期：</span>
-          <input id="endDate" type="date">
-        </div>
-
-        <div>
-          <span>輸出項目：</span>
-          <input id="IdKeyInput" type="text" value="學號">
-        </div>
-
-        <div>
-          <span>出營方式的表單標題：</span>
-          <input id="LeaveTitleInput" class="GroupByKeyInput" type="text" value="下車地點">
-        </div>
-
-        <div>
-          <span>回營方式的表單標題：</span>
-          <input id="BackTitleInput" class="GroupByKeyInput" type="text" value="上車地點">
-        </div>
-
-      </div>
-
-      <div class="middleFlex" style="padding:10px 0;">
-        <form class="container">
-          <label for="file-upload" class="custom-file-upload">
-            <i class="fa fa-cloud-upload"></i>
-            <span id="file-name" style="padding: 20px 0;">請選擇檔案(副檔名：csv)</span>
-          </label>
-          <input id="file-upload" type="file" accept="text/csv" onclick="reset();">
-        </form>
-      </div>
-
-      <div style="display: grid; padding-bottom: 200px;">
-
-        <div>
-          <div class="textPadding">未填表單學號：</div>
-          <label id="notInList"></label>
-        </div>
-
-        <div>
-          <div class="middleFlex">
-            <button id="CarTextBtn" data-clipboard-target="#CarText">Copy</button>
-          </div>
-
-          <div id="CarText">
-            <div>
-              <div id="LeaveListTitle"></div>
-              <ul class="campList" id="LeaveCampList"></ul>
-            </div>
-
-            <div>
-              <div id="BackListTitle"></div>
-              <ul class="campList" id="BackCampList"></ul>
+      <div class="groupItem">
+        <div class="groupTitle">
+          <div class="titleText">資料統計設定</div>
+          <div style="font-size: 12pt; color: gray; padding: 25px 0 5px 0;">
+            <div class="arrowButton">
+              <div class="arrow_1"></div>
+              <div class="arrow_2"></div>
             </div>
           </div>
-
         </div>
 
-        <!-- <div>
-          <div class="middleFlex">
-            <div class="textPadding">自行出入：</div>
-            <button id="SelfTextBtn" data-clipboard-target="#SelfText">Copy</button>
+        <div class=" middleFlex">
+          <div>
+            <label>輸出標題：</label>
+            <input id="battalion" style="width: 80px;" value="一連"></input>
           </div>
-        </div> -->
+
+          <div>
+            <label>人數：</label>
+            <input type="number" id="AllMemberCountInput" style="width: 80px;" value="154"></input>
+          </div>
+
+          <div style="display: none;">
+            <label>放假日期：</label>
+            <input id="startDate" type="date">
+          </div>
+
+          <div style="display: none;">
+            <label>收假日期：</label>
+            <input id="endDate" type="date">
+          </div>
+        </div>
+      </div>
+
+      <div class="groupItem">
+        <div class="groupTitle">
+          <div class="titleText">表單內容設定</div>
+          <div style="font-size: 12pt; color: gray; padding: 25px 0 5px 0;">
+            <div class="arrowButton">
+              <div class="arrow_1"></div>
+              <div class="arrow_2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="middleFlex">
+          <div>
+            <label>輸出項目：</label>
+            <input id="IdKeyInput" type="text" value="學號">
+          </div>
+
+          <div>
+            <label>出營方式的表單標題：</label>
+            <input id="LeaveTitleInput" class="GroupByKeyInput" type="text" value="下車地點">
+          </div>
+
+          <div>
+            <label>回營方式的表單標題：</label>
+            <input id="BackTitleInput" class="GroupByKeyInput" type="text" value="上車地點">
+          </div>
+        </div>
+      </div>
+
+
+      <div class="groupItem">
+        <div class="groupTitle">
+          <div class="titleText">檔案上傳</div>
+        </div>
+
+        <div class="middleFlex" style="padding:10px 0;">
+          <form class="container">
+            <label for="file-upload" class="custom-file-upload">
+              <i class="fa fa-cloud-upload"></i>
+              <span id="file-name" style="padding: 20px 0;">請選擇檔案(副檔名：csv)</span>
+            </label>
+            <input id="file-upload" type="file" accept="text/csv" onclick="reset();">
+          </form>
+        </div>
+      </div>
+
+
+      <div class="groupItem">
+        <div class="groupTitle">
+          <div class="titleText">輸出結果</div>
+          <div id="CarTextBtn" data-clipboard-target="#CarText" style="padding: 20px 0 5px 0;">
+            <i class="fa-regular fa-copy" style="font-size: 12pt; padding: 0; color: gray;"></i>
+            <span style="font-size: 12pt; color: gray;">Copy</span>
+          </div>
+        </div>
+
+        <div style=" display: grid; padding-bottom: 200px;">
+
+          <div>
+            <div class="textPadding">未填表單學號：</div>
+            <label id="notInList"></label>
+          </div>
+
+          <div>
+            <div class="middleFlex">
+
+            </div>
+
+            <div id="CarText">
+              <div>
+                <div id="LeaveListTitle"></div>
+                <ul class="campList" id="LeaveCampList"></ul>
+              </div>
+
+              <div>
+                <div id="BackListTitle"></div>
+                <ul class="campList" id="BackCampList"></ul>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- <div>
+            <div class="middleFlex">
+              <div class="textPadding">自行出入：</div>
+              <button id="SelfTextBtn" data-clipboard-target="#SelfText">Copy</button>
+            </div>
+          </div> -->
+        </div>
       </div>
     </div>
   </main>
@@ -121,6 +166,7 @@
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
   <script type="text/javascript" src="main.js?v=20230127"></script>
+  <script type="text/javascript" src="style.js?v=20230128"></script>
 </body>
 
 </html>

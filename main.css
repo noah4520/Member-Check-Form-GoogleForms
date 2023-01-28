@@ -27,12 +27,20 @@ i {
 
 input {
   border-radius: 6px;
+  height: 30px;
+  border: 1px solid #888;
+  padding: 5px;
+}
+
+label {
+  display: block;
+  padding: 5px 0;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 15px;
+  padding: 0 20px;
 }
 
 .title-nav {
@@ -82,6 +90,11 @@ input {
   align-items: center;
   justify-content: space-between;
   row-gap: 10px;
+  padding: 10px 0;
+}
+
+.middleFlex.hide {
+  display: none;
 }
 
 ul,
