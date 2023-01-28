@@ -97,6 +97,11 @@ function checkAllMemberInArray(tempJson) {
 
   for (key in tempJson) {
 
+    // 若輸入的數字前面沒補0，則自動補0
+    if (tempJson[key][outPutKeyText].length < 3) {
+      tempJson[key][outPutKeyText] = tempJson[key][outPutKeyText].padStart(3, '0');
+    }
+
     if (notFillOutArray.indexOf(tempJson[key][outPutKeyText]) !== -1) {
       notFillOutArray.splice(notFillOutArray.indexOf(tempJson[key][outPutKeyText]), 1);
     }
