@@ -6,7 +6,7 @@
 https://206r2b-form.netlify.app
 
 ### 表單副本（複製副本到自己的雲端硬碟後自行修改）
-https://drive.google.com/drive/folders/1MQ6Lbw1ofsLP5VpdzDJN2K23G3cU5L5J?usp=share_link
+https://docs.google.com/forms/d/1ulVW1i_v30hQ1jEJr76BNp0QWDFdBe65dy-_DxckEFE/copy
 
 ## 這個網站可以做什麼?
 透過Google表單統計後，直接將表單結果匯出成CVS
@@ -26,7 +26,7 @@ https://drive.google.com/drive/folders/1MQ6Lbw1ofsLP5VpdzDJN2K23G3cU5L5J?usp=sha
 
 * 自動由小到大，排序各地點的學號。
  
-* 可透過拖移的方式，調整輸出地點文字的順序
+* 可透過拖移的方式，調整輸出地點文字的順序。
 
 ## Q&A
 ### 為什麼要用HTML5?
