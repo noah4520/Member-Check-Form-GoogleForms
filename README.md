@@ -15,7 +15,7 @@
 
 ## 網址
 ### 使用網址
-https://uhikochen.github.io/Member-Check-Form-GoogleForms/
+https://noah4520.github.io/Member-Check-Form-GoogleForms/
 
 ### 表單副本（複製副本到自己的雲端硬碟後自行修改）
 https://docs.google.com/forms/d/1ulVW1i_v30hQ1jEJr76BNp0QWDFdBe65dy-_DxckEFE/copy
